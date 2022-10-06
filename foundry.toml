@@ -2,5 +2,11 @@
 src = 'src'
 out = 'out'
 libs = ['lib']
+gas_reports = ["Gastimate"]
+
+# [rpc_endpoints]
+# mainnet = "${MAINNET_URL}"
+
+# Remappings in remappings.txt
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
