@@ -13,7 +13,15 @@ contract GastimateTest is Test {
     }
 
     function testPriceFeed() public {
+        gastimate.startMeasuringGas("price feed");
         int price = gastimate.getLatestPrice();
-        emit log_named_int("price: ", price);
+        gastimate.stopMeasuringGas();
+    }
+
+    function testMaths() public {
+        gastimate.startMeasuringGas("math test");
+        gastimate.doStuff(1233);
+        gastimate.stopMeasuringGas();
+        console.log("tx.gasprice", tx.gasprice);
     }
 }

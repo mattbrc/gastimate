@@ -10,7 +10,7 @@ build  :; forge build
 test  :; forge test
 trace  :; forge test -vvv
 # tests with forks
-test-fork :; forge test --fork-url $(MAINNET_URL) --match-contract Gastimate -vvv
+test-fork :; forge test --fork-url $(MAINNET_URL) --gas-report --match-contract Gastimate -vvv
 # fork mainnnet
 anvil :; anvil --fork-url $(MAINNET_URL)
 clean  :; forge clean

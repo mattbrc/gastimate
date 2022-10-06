@@ -2,8 +2,9 @@
 pragma solidity ^0.8.13;
 
 import "chainlink/interfaces/AggregatorV3Interface.sol";
+import "forge-std/Test.sol";
 
-contract Gastimate {
+contract Gastimate is Test {
     AggregatorV3Interface internal priceFeed;
     string private checkpointLabel;
     uint256 private checkpointGasLeft = 1; // Start the slot warm.
@@ -22,25 +23,33 @@ contract Gastimate {
     function getLatestPrice() public view returns (int) {
         (, int price, , , ) = priceFeed.latestRoundData();
         // for ETH / USD price is scaled up by 10 ** 8
-        // truncate decimals
         return price / 1e8;
     }
 
-    function startMeasuringGas(string memory label) internal virtual {
+    // from solmate/test/utils/DSTestPlus.sol
+    function startMeasuringGas(string memory label) public {
         checkpointLabel = label;
 
         checkpointGasLeft = gasleft();
     }
 
-    function stopMeasuringGas() internal virtual {
+    // from solmate/test/utils/DSTestPlus.sol
+    function stopMeasuringGas() public {
         uint256 checkpointGasLeft2 = gasleft();
 
         // Subtract 100 to account for the warm SLOAD in startMeasuringGas.
         uint256 gasDelta = checkpointGasLeft - checkpointGasLeft2 - 100;
+        uint256 gasUSD = (gasDelta * tx.gasprice) / uint(getLatestPrice());
 
         emit log_named_uint(
-            string(abi.encodePacked(checkpointLabel, " Gas")),
-            gasDelta
+            string(abi.encodePacked(checkpointLabel, " Gas Price in USD")),
+            gasUSD
         );
+    }
+
+    function doStuff(uint256 number) public returns (uint256) {
+        uint256 num = number;
+        uint256 maths = num * 15e18;
+        return (maths);
     }
 }
