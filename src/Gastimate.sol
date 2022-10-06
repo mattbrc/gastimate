@@ -39,10 +39,11 @@ contract Gastimate is Test {
 
         // Subtract 100 to account for the warm SLOAD in startMeasuringGas.
         uint256 gasDelta = checkpointGasLeft - checkpointGasLeft2 - 100;
-        uint256 gasUSD = (gasDelta * tx.gasprice) / uint(getLatestPrice());
+        uint256 price = tx.gasprice; //tx.gasprice;
+        uint256 gasUSD = ((gasDelta * price) * uint(getLatestPrice())) / 1e16;
 
         emit log_named_uint(
-            string(abi.encodePacked(checkpointLabel, " Gas Price in USD")),
+            string(abi.encodePacked(checkpointLabel, " Gas Price USD")),
             gasUSD
         );
     }
